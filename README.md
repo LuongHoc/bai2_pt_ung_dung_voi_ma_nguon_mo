@@ -3,47 +3,41 @@
 # Môn: Phát triển ứng dụng với mã nguồn mở-TEE0421
 # Bài tập 02: SỬ DỤNG DJANGO ĐỂ TẠO WEB QUẢN LÝ TIỆM CẦM ĐỒ
 
+# 1. TỔ CHỨC CSDL CHO HỆ THỐNG QUẢN LÝ TIỆM CẦM ĐỒ
 
+# 2. SỬ DỤNG DOCKER TRÊN UBUNTU:
 
-# Bài tập 02 - Sử dụng Django để tạo web quản lý tiệm cầm đồ
+## 1. SSH vào máy Ubuntu từ CMD
 
-## 1. Mục tiêu
-Xây dựng website quản lý tiệm cầm đồ bằng **Django**, chạy trong **Docker**, sử dụng **MariaDB** làm cơ sở dữ liệu và **phpMyAdmin** để kiểm tra dữ liệu.
+Nhấn `Windows + R`, gõ `cmd` rồi nhấn `Enter`.
+Gõ lệnh sau:
 
----
+```bash
+ssh admin1@192.168.1.15
+```
+
+<img width="1103" height="639" alt="image" src="https://github.com/user-attachments/assets/2b0a43e7-bc9c-402d-a780-7bc76bf596f5" />
+
 
 ## 2. Chuẩn bị môi trường
 
-### 2.1 Cập nhật hệ thống
+### 2.1. Cập nhật hệ thống
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
 
-### 2.2 Cài Docker
+### 2.2. Cài Docker
 ```bash
 sudo apt install -y docker.io docker-compose-plugin
 ```
 
-### 2.3 Kiểm tra Docker
+### 2.3. Kiểm tra Docker
 ```bash
 docker --version
 docker compose version
 ```
+<img width="1103" height="639" alt="image" src="https://github.com/user-attachments/assets/b1dbb4ec-004b-4759-8f7e-5f8619fb15e2" />
 
-### 2.4 Khởi động Docker
-```bash
-sudo systemctl enable docker
-sudo systemctl start docker
-```
-
-### 2.5 Thêm user vào nhóm docker
-```bash
-sudo usermod -aG docker $USER
-```
-
-Sau khi chạy lệnh trên, thoát SSH và đăng nhập lại để quyền có hiệu lực.
-
----
 
 ## 3. Tạo thư mục dự án
 
@@ -102,6 +96,7 @@ Pillow==10.4.0
 
 <img width="1103" height="639" alt="image" src="https://github.com/user-attachments/assets/2ab21c6a-cdfd-4042-a885-e476be55c965" />
 
+
 ## 6. Tạo file `Dockerfile`
 
 ``` 
@@ -109,8 +104,6 @@ nano Dockerfile
 ```
 
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/f7e9d1da-6ba5-42c3-a1d1-d3782bc250b4" />
-
-
 
 
 Nội dung file `Dockerfile`:
@@ -138,6 +131,7 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 ```
 
 <img width="1920" height="1030" alt="image" src="https://github.com/user-attachments/assets/2593bc89-61cf-4dee-a05c-082dfdf1ea08" />
+
 
 ## 7. Tạo file `docker-compose.yml`
 
@@ -360,21 +354,15 @@ sudo chown -R admin1:admin1 ~/shopcamdo
 
 Sau đó mở lại file và lưu lại.
 
+## 9. Tạo modelsCSDL
 
-
-
-
-## 9. Tạo models theo CSDL của bạn
-
-Trong bước này, tạo các model Django tương ứng với các bảng trong cơ sở dữ liệu đã thiết kế.
-
-### 9.1 Mở file `core/models.py`
+1. Mở file `core/models.py`
 
 ```bash
 nano core/models.py
 ```
 
-### 9.2 Nội dung file `core/models.py`
+2. Nội dung file `core/models.py`
 
 ```python
 from django.db import models
@@ -504,15 +492,13 @@ class ThanhToan(models.Model):
 
 ## 10. Đăng ký models trong admin
 
-Sau khi tạo models, cần đăng ký chúng trong trang quản trị Django để có thể thêm/sửa/xóa dữ liệu dễ dàng.
-
-### 10.1 Mở file `core/admin.py`
+1. Mở file `core/admin.py`
 
 ```bash
 nano core/admin.py
 ```
 
-### 10.2 Nội dung file `core/admin.py`
+2. Nội dung file `core/admin.py`
 
 ```python
 from django.contrib import admin
@@ -560,15 +546,13 @@ class ThanhToanAdmin(admin.ModelAdmin):
 
 ## 11. Tạo views
 
-Tạo trang chủ để hiển thị dữ liệu tổng quan của hệ thống.
-
-### 11.1 Mở file `core/views.py`
+1. Mở file `core/views.py`
 
 ```bash
 nano core/views.py
 ```
 
-### 11.2 Nội dung file `core/views.py`
+2. Nội dung file `core/views.py`
 
 ```python
 from django.shortcuts import render
@@ -598,13 +582,13 @@ def home(request):
 
 ## 12. Tạo file URL cho app
 
-### 12.1 Tạo file `core/urls.py`
+1. Tạo file `core/urls.py`
 
 ```bash
 nano core/urls.py
 ```
 
-### 12.2 Nội dung file `core/urls.py`
+2. Nội dung file `core/urls.py`
 
 ```python
 from django.urls import path
@@ -619,13 +603,13 @@ urlpatterns = [
 
 ## 13. Sửa file URL chính của project
 
-### 13.1 Mở file `config/urls.py`
+1. Mở file `config/urls.py`
 
 ```bash
 nano config/urls.py
 ```
 
-### 13.2 Nội dung file `config/urls.py`
+2. Nội dung file `config/urls.py`
 
 ```python
 from django.contrib import admin
@@ -643,19 +627,19 @@ urlpatterns = [
 
 ## 14. Tạo giao diện trang chủ
 
-### 14.1 Tạo thư mục template
+1. Tạo thư mục template
 
 ```bash
 mkdir -p core/templates/core
 ```
 
-### 14.2 Tạo file `core/templates/core/home.html`
+2. Tạo file `core/templates/core/home.html`
 
 ```bash
 nano core/templates/core/home.html
 ```
 
-### 14.3 Nội dung file `home.html`
+3. Nội dung file `home.html`
 
 ```html
 <!DOCTYPE html>
@@ -782,15 +766,13 @@ nano core/templates/core/home.html
 
 ## 15. Tạo migration cho các model
 
-Sau khi đã tạo xong `models.py`, Django cần sinh các file migration để tạo bảng trong cơ sở dữ liệu MariaDB.
-
-### 15.1 Chạy lệnh tạo migration
+1. Chạy lệnh tạo migration
 
 ```bash
 docker compose exec web python manage.py makemigrations
 ```
 
-### 15.2 Kết quả mong đợi
+2. Kết quả mong đợi
 Nếu thành công, Django sẽ tạo các file migration cho app `core`.
 
 <img width="1106" height="640" alt="image" src="https://github.com/user-attachments/assets/0ff54822-7c7b-475c-a0ee-d1704cf5c8e3" />
@@ -804,62 +786,24 @@ Sau khi tạo migration, tiếp tục chạy lệnh sau để tạo bảng trong
 docker compose exec web python manage.py migrate
 ```
 
-### 16.1 Ý nghĩa
-- Lệnh này sẽ tạo toàn bộ bảng trong database.
-- Các bảng sẽ tương ứng với các model đã khai báo trong `core/models.py`.
-
----
+<img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/5e22c99e-0335-4450-9a47-b9fbbe9a3db6" />
 
 ## 17. Tạo tài khoản quản trị
 
-Để đăng nhập vào trang quản trị Django, cần tạo một superuser.
-
-### 17.1 Chạy lệnh tạo superuser
+1. Chạy lệnh tạo superuser
 
 ```bash
 docker compose exec web python manage.py createsuperuser
 ```
-
-### 17.2 Nhập thông tin
+2. Nhập thông tin
 Khi được yêu cầu, nhập:
 - `username`
 - `email`
 - `password`
 
-Ví dụ:
-- Username: `admin`
-- Email: `admin@gmail.com`
-- Password: `Admin@12345`
-
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/c9be1246-eac8-467e-ac0f-e5e27cbc2415" />
 
-
-## 18. Chạy lại container nếu cần
-
-Nếu container chưa chạy, bật lại bằng lệnh sau:
-
-```bash
-docker compose up -d
-```
-
-### 18.1 Kiểm tra trạng thái container
-
-```bash
-docker compose ps
-```
-
-### 18.2 Ý nghĩa
-- `db`: container MariaDB
-- `phpmyadmin`: container giao diện quản lý database
-- `web`: container Django
-
----
-
-## 19. Truy cập website Django
-
-Sau khi container chạy thành công, mở trình duyệt và truy cập website Django.
-
-### 19.1 Truy cập trang chủ
+3. Truy cập website Django
 
 ```text
 http://192.168.1.15:8000
@@ -867,26 +811,15 @@ http://192.168.1.15:8000
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a3604bf7-5b10-4abe-9a80-30cc3bb479d6" />
 
-
-
-## 20. Truy cập trang admin
-
-Trang quản trị Django dùng để nhập và quản lý dữ liệu trong các bảng.
-
-### 20.1 URL trang admin
+4. Truy cập trang admin
 
 ```text
 http://192.168.1.15:8000/admin
 ```
 
-### 20.2 Đăng nhập
-Sử dụng tài khoản superuser đã tạo ở bước 17 để đăng nhập.
-
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b1616454-2427-44bb-b30d-623284cb455a" />
 
-
-### 20.3 Chức năng
-Tại đây có thể:
+Chức năng:
 - thêm khách hàng
 - thêm nhân viên
 - thêm loại tài sản
@@ -894,114 +827,39 @@ Tại đây có thể:
 - thêm hợp đồng
 - thêm thanh toán
 
+## 18. Tạo dữ liệu mẫu trong trang admin
 
-## 21. Tạo dữ liệu mẫu trong trang admin
-
-Sau khi đã tạo tài khoản superuser và đăng nhập vào trang quản trị Django, tiến hành nhập dữ liệu mẫu để kiểm tra hệ thống.
-
-### 21.1 Tạo khách hàng
-Vào mục **KhachHangs** và thêm một số khách hàng.
-
-Ví dụ:
-
-- CCCD: `012345678901`
-- Họ tên: `Nguyễn Văn A`
-- SĐT: `0909000001`
-- Địa chỉ: `TP.HCM`
-- Ngày sinh: `2000-01-01`
-- Giới tính: `Nam`
-- Trạng thái: `binh_thuong`
+1. Tạo khách hàng
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/137f4ade-b4d9-4f92-a4ad-2c77f637c0e9" />
 
-
-### 21.2 Tạo nhân viên
-Vào mục **NhanViens** và thêm dữ liệu nhân viên.
-
-Ví dụ:
-
-- Họ tên: `Trần Văn B`
-- SĐT: `0909000002`
-- Địa chỉ: `TP.HCM`
-- CCCD: `012345678902`
-- Tài khoản: `tranvanb`
-- Chức vụ: `Nhân viên`
-- Ngày vào làm: `2025-01-01`
+2. Tạo nhân viên
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/39eea156-3e80-4f54-8f24-81a0ee504290" />
 
+3. Tạo loại tài sản
 
-### 21.3 Tạo loại tài sản
-Vào mục **LoaiTaiSans** và thêm các loại tài sản:
-
-- Xe máy
-- Điện thoại
-- Laptop
-- Trang sức
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0e34b0ed-2509-4ee7-9eae-08034265ce19" />
 
-### 21.4 Tạo tài sản
-Vào mục **TaiSans** và thêm một tài sản mẫu.
+4.  Tạo tài sản
 
-Ví dụ:
-
-- Khách hàng: `Nguyễn Văn A`
-- Loại tài sản: `Điện thoại`
-- Tên tài sản: `iPhone 14`
-- Mô tả: `Máy còn mới`
-- Giá trị thẩm định: `25000000`
-- Trạng thái: `da_cam`
-- Số lượng: `1`
-- Tình trạng tài sản: `Còn tốt`
-- Vị trí lưu kho: `Kệ A1`
-- 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f7f1cb49-c4f7-4835-8274-7329b768d9f9" />
 
-### 21.5 Tạo hợp đồng
-Vào mục **HopDongs** và thêm một hợp đồng mẫu.
+5. Tạo hợp đồng
 
-Ví dụ:
-
-- Khách hàng: `Nguyễn Văn A`
-- Nhân viên: `Trần Văn B`
-- Tài sản: `iPhone 14`
-- Số tiền vay: `15000000`
-- Lãi suất: `3.00`
-- Ngày vay: `2026-05-01`
-- Ngày đến hạn: `2026-06-01`
-- Ghi chú: `Hợp đồng cầm điện thoại`
-- Đã trả: `0`
-- Tiền lãi phải trả: `0`
-- Tổng tiền phải trả: `0`
-- Trạng thái hợp đồng: `dang_hieu_luc`
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/aa5c6eb3-8198-4633-9def-b60144feaa59" />
 
-### 21.6 Tạo thanh toán
-Vào mục **ThanhToans** và thêm một giao dịch thanh toán mẫu.
+6. Tạo thanh toán
 
-Ví dụ:
-
-- Hợp đồng: chọn hợp đồng vừa tạo
-- Nhân viên: `Trần Văn B`
-- Số tiền: `500000`
-- Nội dung: `Trả lãi tháng đầu`
-- Hình thức thanh toán: `tien_mat`
-- Loại thanh toán: `tra_lai`
-
----
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/24990a48-1acb-4c0a-a351-c30bd94800f5" />
 
-## 22. Kiểm tra trang chủ
+## 19. Kiểm tra trang chủ
 
-Sau khi nhập dữ liệu, quay lại trang chủ của website để kiểm tra hiển thị.
-
-### 22.1 Truy cập trang chủ
+1. Truy cập trang chủ
 
 ```text
 http://192.168.1.15:8000
 ```
-
-### 22.2 Kết quả mong đợi
 Trang chủ sẽ hiển thị:
 - danh sách hợp đồng đang hiệu lực
 - danh sách hợp đồng quá hạn
@@ -1010,23 +868,22 @@ Trang chủ sẽ hiển thị:
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a51ecd6c-f711-4455-adc0-9f5ec05552f2" />
 
-
-## 23. Kiểm tra dữ liệu bằng phpMyAdmin
+## 20. Kiểm tra dữ liệu bằng phpMyAdmin
 
 Dùng phpMyAdmin để xác nhận dữ liệu đã được lưu đúng trong MariaDB.
 
-### 23.1 Truy cập phpMyAdmin
+1. Truy cập phpMyAdmin
 
 ```text
 http://192.169.1.15:8080
 ```
 
-### 23.2 Thông tin đăng nhập
+2. Thông tin đăng nhập
 - Server: `db`
 - Username: `shopuser`
 - Password: `shoppass123`
 
-### 23.3 Các bảng cần kiểm tra
+3. Các bảng cần kiểm tra
 Sau khi đăng nhập, kiểm tra các bảng:
 
 - `core_khachhang`
@@ -1036,22 +893,12 @@ Sau khi đăng nhập, kiểm tra các bảng:
 - `core_hopdong`
 - `core_thanhtoan`
 
-Nếu thấy dữ liệu hiển thị đúng, nghĩa là hệ thống CSDL hoạt động bình thường.
-
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1ce10cc2-f69e-48ea-bb5b-85ff3ed38db4" />
 
 
-## 24. Cấu hình Cloudflare Tunnel
+## 21. Cấu hình Cloudflare Tunnel
 
-Để public website ra internet bằng domain riêng, sử dụng Cloudflare Tunnel.
-
-
-
-## 24. Cấu hình Cloudflare Tunnel bằng Docker
-
-Ở bước này, public website Django ra internet bằng Cloudflare Tunnel, chạy dưới dạng một service riêng trong `docker-compose.yml`.
-
-### 24.1 Mở trang Tunnels trên Cloudflare
+**1. Mở trang Tunnels trên Cloudflare**
 Vào Cloudflare Dashboard:
 
 - Chọn **Networking**
@@ -1060,62 +907,55 @@ Vào Cloudflare Dashboard:
 
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/5a1d9eff-f7f2-4b4e-8404-729a04e234a3" />
 
-### 24.2 Tạo tunnel mới
+**2. Tạo tunnel mới**
 Ở màn hình **Create a Tunnel**:
 
-- Nhập tên tunnel, ví dụ: `shopcamdo`
+- Nhập tên tunnel `shopcamdo`
 - Chọn môi trường **Docker**
 - Bấm **Create Tunnel**
 
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/b9591ddd-218f-4619-bfa2-e587ed6b6f1f" />
 
-### 24.3 Chạy tunnel bằng Docker
-Cloudflare sẽ cung cấp lệnh chạy `cloudflared` bằng Docker.  
+**3. Chạy tunnel bằng Docker**
+
+Cloudflare sẽ cung cấp lệnh chạy `cloudflared` bằng Docker.
+
 Copy lệnh đó và dùng trong `docker-compose.yml` để chạy tunnel cùng với project.
 
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/dcd66dbd-5d88-47d9-af9b-56f7fc9776f9" />
 
-
-
-Ví dụ service `cloudflared`:
 
 ```yaml
 cloudflared:
   image: cloudflare/cloudflared:latest
   container_name: shopcamdo_cloudflared
   restart: always
-  command: tunnel --no-autoupdate run --token YOUR_TOKEN_HERE
+  command: tunnel --no-autoupdate run --token eyJhIjoiZWNhNDdhZWZiNmMyZWM3MWVkMWY5ZmI3NDZjZmQwNzMiLCJ0IjoiYzVkMjE4ZmItMjJlMS00ODMyLWIwMTQtNDEwOTE2MThhMzM0IiwicyI6IlpEazRPV0l5TkdRdE5qazVNUzAwWkdFMkxXRXdOV0l0TWpNM00ySXhPRFkxTlRFMCJ9
   depends_on:
     - web
 ```
 
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/6eaea796-df5c-40fd-ba07-857c076feff0" />
 
-
-### 24.4 Kiểm tra tunnel đã kết nối
-Sau khi chạy Docker Compose, vào lại Cloudflare Dashboard → **Tunnels**.  
-Nếu tunnel hiện trạng thái **Healthy** nghĩa là kết nối đã thành công.
-
-<img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/3f4c7818-9299-4293-95b7-bda965b1a34b" />
-
-## 25. Tạo route cho ứng dụng public
+## 22. Tạo route cho ứng dụng public
 
 Sau khi tunnel đã kết nối thành công, cần tạo route để trỏ domain/subdomain về ứng dụng Django.
 
-### 25.1 Mở tab Routes
-Trong tunnel `shopcamdo`, chọn tab **Routes**.
+**1. Mở tab Routes**
+Trong tunnel `shopcamdo`
 
-### 25.2 Bấm Add route
+<img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/6d56dd8b-4def-4632-882d-62cc9fe1375c" />
+- chọn tab **Routes**.
+
+- Bấm Add route
+
 Chọn:
 
 - **Published application**
 
-<img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/6d56dd8b-4def-4632-882d-62cc9fe1375c" />
-
-
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/6c0df4db-6257-4006-b52b-610ce6b98a67" />
 
-### 25.3 Điền thông tin route
+**2. Điền thông tin route**
 Tại cửa sổ **Add published application**, điền:
 
 - **Subdomain**: `shop`
@@ -1123,16 +963,11 @@ Tại cửa sổ **Add published application**, điền:
 - **Path**: để trống hoặc nhập `/`
 - **Service URL**: `http://web:8000`
 
-> Nếu dùng Docker Compose, phải trỏ đến service nội bộ `web`, không dùng `localhost`.
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5f636ac5-f0f8-489f-8a26-2ddcdd90b217" />
 
+- Bấm **Add route** để lưu cấu hình.
 
-### 25.4 Thêm route
-Bấm **Add route** để lưu cấu hình.
-
----
-
-## 26. Kiểm tra truy cập website
+## 23. Kiểm tra truy cập website
 
 Sau khi thêm route, chờ Cloudflare cập nhật DNS vài phút rồi truy cập:
 
@@ -1141,14 +976,10 @@ https://shop.luongvanhoc.io.vn
 ```
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/cce1a88b-0961-4664-90c4-8535fd9f9701" />
 
-### 26.1 Kết quả mong đợi
-Website Django sẽ hiển thị qua domain Cloudflare Tunnel.
-
-
 
 ## 27. Kiểm tra hệ thống sau khi public
 
-Sau khi public thành công, kiểm tra lại toàn bộ hệ thống:
+**Sau khi public thành công, kiểm tra lại toàn bộ hệ thống:**
 
 - Truy cập trang chủ Django qua domain Cloudflare
 - Truy cập trang admin:
@@ -1160,17 +991,16 @@ https://shop.luongvanhoc.io.vn/admin
 - Truy cập phpMyAdmin:
   
 ```text
-http://IP_MAY_UBUNTU:8080
+http://192.168.1.15:8080
 ```
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f570c3cb-4ab3-4764-90b2-6c95e2283370" />
 
-### 27.1 Đảm bảo các container đều đang chạy
+**Đảm bảo các container đều đang chạy**
 Chạy:
 
 ```bash
 docker compose ps
 ```
-
-Phải thấy:
 
 - `shopcamdo_db`
 - `shopcamdo_web`
