@@ -5,6 +5,8 @@
 
 # 1. TỔ CHỨC CSDL CHO HỆ THỐNG QUẢN LÝ TIỆM CẦM ĐỒ
 
+<img width="658" height="873" alt="image" src="https://github.com/user-attachments/assets/4743a158-1162-436b-8ed2-1b5ba6cc9ff8" />
+
 # 2. SỬ DỤNG DOCKER TRÊN UBUNTU:
 
 ## 1. SSH vào máy Ubuntu từ CMD
