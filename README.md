@@ -1039,8 +1039,6 @@ https://shop.luongvanhoc.io.vn
 ```
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f22816e8-341e-4391-b530-d3116fe23f9e" />
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/abd80d89-cac8-4752-8798-d209b6f5854d" />
-
 
 ## 27. Kiểm tra hệ thống sau khi public
 
