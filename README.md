@@ -987,6 +987,7 @@ https://shop.luongvanhoc.io.vn
 ```text
 https://shop.luongvanhoc.io.vn/admin
 ```
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8f2d71d3-8925-457a-983c-d1779b0e0f9b" />
 
 - Truy cập phpMyAdmin:
   
@@ -996,6 +997,7 @@ http://192.168.1.15:8080
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f570c3cb-4ab3-4764-90b2-6c95e2283370" />
 
 **Đảm bảo các container đều đang chạy**
+
 Chạy:
 
 ```bash
