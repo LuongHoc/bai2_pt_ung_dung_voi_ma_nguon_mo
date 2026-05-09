@@ -3,11 +3,11 @@
 # Môn: Phát triển ứng dụng với mã nguồn mở-TEE0421
 # Bài tập 02: SỬ DỤNG DJANGO ĐỂ TẠO WEB QUẢN LÝ TIỆM CẦM ĐỒ
 
-# 1. TỔ CHỨC CSDL CHO HỆ THỐNG QUẢN LÝ TIỆM CẦM ĐỒ
+# I. TỔ CHỨC CSDL CHO HỆ THỐNG QUẢN LÝ TIỆM CẦM ĐỒ
 
 <img width="658" height="873" alt="image" src="https://github.com/user-attachments/assets/4743a158-1162-436b-8ed2-1b5ba6cc9ff8" />
 
-# 2. SỬ DỤNG DOCKER TRÊN UBUNTU:
+# II. SỬ DỤNG DOCKER TRÊN UBUNTU:
 
 ## 1. SSH vào máy Ubuntu từ CMD
 
@@ -358,13 +358,13 @@ Sau đó mở lại file và lưu lại.
 
 ## 9. Tạo modelsCSDL
 
-1. Mở file `core/models.py`
+**1. Mở file `core/models.py`**
 
 ```bash
 nano core/models.py
 ```
 
-2. Nội dung file `core/models.py`
+**2. Nội dung file `core/models.py`**
 
 ```python
 from django.db import models
@@ -494,13 +494,13 @@ class ThanhToan(models.Model):
 
 ## 10. Đăng ký models trong admin
 
-1. Mở file `core/admin.py`
+**1. Mở file `core/admin.py`**
 
 ```bash
 nano core/admin.py
 ```
 
-2. Nội dung file `core/admin.py`
+**2. Nội dung file `core/admin.py`**
 
 ```python
 from django.contrib import admin
@@ -591,13 +591,13 @@ def home(request):
 
 ## 12. Tạo file URL cho app
 
-1. Tạo file `core/urls.py`
+**1. Tạo file `core/urls.py`**
 
 ```bash
 nano core/urls.py
 ```
 
-2. Nội dung file `core/urls.py`
+**2. Nội dung file `core/urls.py`**
 
 ```python
 from django.urls import path
@@ -612,13 +612,13 @@ urlpatterns = [
 
 ## 13. Sửa file URL chính của project
 
-1. Mở file `config/urls.py`
+**1. Mở file `config/urls.py`**
 
 ```bash
 nano config/urls.py
 ```
 
-2. Nội dung file `config/urls.py`
+**2. Nội dung file `config/urls.py`**
 
 ```python
 from django.contrib import admin
@@ -636,19 +636,19 @@ urlpatterns = [
 
 ## 14. Tạo giao diện trang chủ
 
-1. Tạo thư mục template
+**1. Tạo thư mục template**
 
 ```bash
 mkdir -p core/templates/core
 ```
 
-2. Tạo file `core/templates/core/home.html`
+**2. Tạo file `core/templates/core/home.html`**
 
 ```bash
 nano core/templates/core/home.html
 ```
 
-3. Nội dung file `home.html`
+**3. Nội dung file `home.html`**
 
 ```html
 <!DOCTYPE html>
@@ -831,13 +831,14 @@ nano core/templates/core/home.html
 
 ## 15. Tạo migration cho các model
 
-1. Chạy lệnh tạo migration
+**1. Chạy lệnh tạo migration**
 
 ```bash
 docker compose exec web python manage.py makemigrations
 ```
 
-2. Kết quả mong đợi
+**2. Kết quả mong đợi**
+
 Nếu thành công, Django sẽ tạo các file migration cho app `core`.
 
 <img width="1106" height="640" alt="image" src="https://github.com/user-attachments/assets/0ff54822-7c7b-475c-a0ee-d1704cf5c8e3" />
@@ -855,12 +856,12 @@ docker compose exec web python manage.py migrate
 
 ## 17. Tạo tài khoản quản trị
 
-1. Chạy lệnh tạo superuser
+**1. Chạy lệnh tạo superuser**
 
 ```bash
 docker compose exec web python manage.py createsuperuser
 ```
-2. Nhập thông tin
+**2. Nhập thông tin**
 Khi được yêu cầu, nhập:
 - `username`
 - `email`
@@ -868,7 +869,7 @@ Khi được yêu cầu, nhập:
 
 <img width="1980" height="1080" alt="image" src="https://github.com/user-attachments/assets/c9be1246-eac8-467e-ac0f-e5e27cbc2415" />
 
-3. Truy cập website Django
+**3. Truy cập website Django**
 
 ```text
 http://192.168.1.15:8000
@@ -894,33 +895,33 @@ Chức năng:
 
 ## 18. Tạo dữ liệu mẫu trong trang admin
 
-1. Tạo khách hàng
+**1. Tạo khách hàng**
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/137f4ade-b4d9-4f92-a4ad-2c77f637c0e9" />
 
-2. Tạo nhân viên
+**2. Tạo nhân viên**
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/39eea156-3e80-4f54-8f24-81a0ee504290" />
 
-3. Tạo loại tài sản
+**3. Tạo loại tài sản**
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0e34b0ed-2509-4ee7-9eae-08034265ce19" />
 
-4.  Tạo tài sản
+**4. Tạo tài sản**
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f7f1cb49-c4f7-4835-8274-7329b768d9f9" />
 
-5. Tạo hợp đồng
+**5. Tạo hợp đồng**
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/aa5c6eb3-8198-4633-9def-b60144feaa59" />
 
-6. Tạo thanh toán
+**6. Tạo thanh toán**
 
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/24990a48-1acb-4c0a-a351-c30bd94800f5" />
 
 ## 19. Kiểm tra trang chủ
 
-1. Truy cập trang chủ
+**1. Truy cập trang chủ**
 
 ```text
 http://192.168.1.15:8000
@@ -937,18 +938,18 @@ Trang chủ sẽ hiển thị:
 
 Dùng phpMyAdmin để xác nhận dữ liệu đã được lưu đúng trong MariaDB.
 
-1. Truy cập phpMyAdmin
+**1. Truy cập phpMyAdmin**
 
 ```text
 http://192.169.1.15:8080
 ```
 
-2. Thông tin đăng nhập
+**2. Thông tin đăng nhập**
 - Server: `db`
 - Username: `shopuser`
 - Password: `shoppass123`
 
-3. Các bảng cần kiểm tra
+**3. Các bảng cần kiểm tra**
 Sau khi đăng nhập, kiểm tra các bảng:
 
 - `core_khachhang`
