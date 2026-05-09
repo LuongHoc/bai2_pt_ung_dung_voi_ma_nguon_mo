@@ -557,6 +557,7 @@ nano core/views.py
 ```python
 from django.shortcuts import render
 from django.utils import timezone
+from django.db.models import F
 from .models import KhachHang, HopDong, ThanhToan
 
 
@@ -564,8 +565,14 @@ def home(request):
     today = timezone.now().date()
 
     hop_dong_dang_hieu_luc = HopDong.objects.filter(trang_thai_hop_dong='dang_hieu_luc')
-    hop_dong_qua_han = HopDong.objects.filter(trang_thai_hop_dong='qua_han')
+
+    hop_dong_qua_han = HopDong.objects.filter(
+        ngay_den_han__lt=today,
+        da_tra__lt=F('tong_tien_phai_tra')
+    )
+
     khach_hang_no_xau = KhachHang.objects.filter(trang_thai='no_xau')
+
     thanh_toan_moi_nhat = ThanhToan.objects.order_by('-ngay_thanh_toan')[:10]
 
     context = {
@@ -578,7 +585,7 @@ def home(request):
     return render(request, 'core/home.html', context)
 ```
 
-<img width="1920" height="1030" alt="image" src="https://github.com/user-attachments/assets/0fd752fb-9c92-45b6-855d-ac7ecbc886e3" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b98eebf1-cac0-4029-8b02-184f460f1377" />
 
 ## 12. Tạo file URL cho app
 
@@ -613,17 +620,17 @@ nano config/urls.py
 
 ```python
 from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path
+from core.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('core.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', home, name='home'),
+]
 ```
 
-<img width="1103" height="639" alt="image" src="https://github.com/user-attachments/assets/ea20a2be-2749-4566-b4bd-6055a1981e46" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d4efac69-2b4d-49c5-a34c-e756e52a70ef" />
+
 
 ## 14. Tạo giao diện trang chủ
 
@@ -646,17 +653,55 @@ nano core/templates/core/home.html
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý tiệm cầm đồ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống quản lý tiệm cầm đồ</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background: #f4f6f8; }
-        .container { max-width: 1300px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
-        h1 { color: #222; }
-        h2 { margin-top: 30px; color: #333; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: #007bff; color: white; }
-        .badge-red { color: red; font-weight: bold; }
-        .badge-green { color: green; font-weight: bold; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+        }
+        h1, h2 {
+            color: #222;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 30px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: #0d6efd;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .empty {
+            text-align: center;
+            color: #777;
+        }
+        .bad {
+            color: red;
+            font-weight: bold;
+        }
+        .good {
+            color: green;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -666,103 +711,121 @@ nano core/templates/core/home.html
 
     <h2>Hợp đồng đang hiệu lực</h2>
     <table>
-        <tr>
-            <th>Mã HĐ</th>
-            <th>Khách hàng</th>
-            <th>Tài sản</th>
-            <th>Số tiền vay</th>
-            <th>Ngày đến hạn</th>
-            <th>Trạng thái</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Mã HĐ</th>
+                <th>Khách hàng</th>
+                <th>Tài sản</th>
+                <th>Số tiền vay</th>
+                <th>Ngày đến hạn</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for hd in hop_dong_dang_hieu_luc %}
-        <tr>
-            <td>{{ hd.ma_hop_dong }}</td>
-            <td>{{ hd.ma_kh.ho_ten }}</td>
-            <td>{{ hd.ma_tai_san.ten_tai_san }}</td>
-            <td>{{ hd.so_tien_vay }}</td>
-            <td>{{ hd.ngay_den_han }}</td>
-            <td class="badge-green">{{ hd.get_trang_thai_hop_dong_display }}</td>
-        </tr>
+            <tr>
+                <td>{{ hd.ma_hop_dong }}</td>
+                <td>{{ hd.ma_kh.ho_ten }}</td>
+                <td>{{ hd.ma_tai_san.ten_tai_san }}</td>
+                <td>{{ hd.so_tien_vay }}</td>
+                <td>{{ hd.ngay_den_han }}</td>
+                <td class="good">{{ hd.get_trang_thai_hop_dong_display }}</td>
+            </tr>
         {% empty %}
-        <tr><td colspan="6">Không có dữ liệu</td></tr>
+            <tr><td colspan="6" class="empty">Không có dữ liệu</td></tr>
         {% endfor %}
+        </tbody>
     </table>
 
     <h2>Hợp đồng quá hạn</h2>
     <table>
-        <tr>
-            <th>Mã HĐ</th>
-            <th>Khách hàng</th>
-            <th>Tài sản</th>
-            <th>Số tiền vay</th>
-            <th>Ngày đến hạn</th>
-            <th>Trạng thái</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Mã HĐ</th>
+                <th>Khách hàng</th>
+                <th>Tài sản</th>
+                <th>Số tiền vay</th>
+                <th>Đã trả</th>
+                <th>Tổng phải trả</th>
+                <th>Ngày đến hạn</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for hd in hop_dong_qua_han %}
-        <tr>
-            <td>{{ hd.ma_hop_dong }}</td>
-            <td>{{ hd.ma_kh.ho_ten }}</td>
-            <td>{{ hd.ma_tai_san.ten_tai_san }}</td>
-            <td>{{ hd.so_tien_vay }}</td>
-            <td>{{ hd.ngay_den_han }}</td>
-            <td class="badge-red">{{ hd.get_trang_thai_hop_dong_display }}</td>
-        </tr>
+            <tr>
+                <td>{{ hd.ma_hop_dong }}</td>
+                <td>{{ hd.ma_kh.ho_ten }}</td>
+                <td>{{ hd.ma_tai_san.ten_tai_san }}</td>
+                <td>{{ hd.so_tien_vay }}</td>
+                <td class="bad">{{ hd.da_tra }}</td>
+                <td>{{ hd.tong_tien_phai_tra }}</td>
+                <td>{{ hd.ngay_den_han }}</td>
+            </tr>
         {% empty %}
-        <tr><td colspan="6">Không có dữ liệu</td></tr>
+            <tr><td colspan="7" class="empty">Không có hợp đồng quá hạn</td></tr>
         {% endfor %}
+        </tbody>
     </table>
 
     <h2>Khách hàng nợ xấu</h2>
     <table>
-        <tr>
-            <th>Mã KH</th>
-            <th>Họ tên</th>
-            <th>CCCD</th>
-            <th>SĐT</th>
-            <th>Trạng thái</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Mã KH</th>
+                <th>Họ tên</th>
+                <th>CCCD</th>
+                <th>SĐT</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for kh in khach_hang_no_xau %}
-        <tr>
-            <td>{{ kh.ma_kh }}</td>
-            <td>{{ kh.ho_ten }}</td>
-            <td>{{ kh.cccd }}</td>
-            <td>{{ kh.sdt }}</td>
-            <td class="badge-red">{{ kh.get_trang_thai_display }}</td>
-        </tr>
+            <tr>
+                <td>{{ kh.ma_kh }}</td>
+                <td>{{ kh.ho_ten }}</td>
+                <td>{{ kh.cccd }}</td>
+                <td>{{ kh.so_dien_thoai }}</td>
+                <td class="bad">{{ kh.get_trang_thai_display }}</td>
+            </tr>
         {% empty %}
-        <tr><td colspan="5">Không có khách hàng nợ xấu</td></tr>
+            <tr><td colspan="5" class="empty">Không có khách hàng nợ xấu</td></tr>
         {% endfor %}
+        </tbody>
     </table>
 
     <h2>10 thanh toán gần nhất</h2>
     <table>
-        <tr>
-            <th>Mã TT</th>
-            <th>Hợp đồng</th>
-            <th>Số tiền</th>
-            <th>Hình thức</th>
-            <th>Loại thanh toán</th>
-            <th>Ngày thanh toán</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Mã TT</th>
+                <th>Hợp đồng</th>
+                <th>Số tiền</th>
+                <th>Hình thức</th>
+                <th>Loại thanh toán</th>
+                <th>Ngày thanh toán</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for tt in thanh_toan_moi_nhat %}
-        <tr>
-            <td>{{ tt.ma_thanh_toan }}</td>
-            <td>{{ tt.ma_hop_dong.ma_hop_dong }}</td>
-            <td>{{ tt.so_tien }}</td>
-            <td>{{ tt.get_hinh_thuc_tt_display }}</td>
-            <td>{{ tt.get_loai_thanh_toan_display }}</td>
-            <td>{{ tt.ngay_thanh_toan }}</td>
-        </tr>
+            <tr>
+                <td>{{ tt.ma_thanh_toan }}</td>
+                <td>{{ tt.ma_hop_dong.ma_hop_dong }}</td>
+                <td>{{ tt.so_tien }}</td>
+                <td>{{ tt.hinh_thuc_thanh_toan }}</td>
+                <td>{{ tt.loai_thanh_toan }}</td>
+                <td>{{ tt.ngay_thanh_toan }}</td>
+            </tr>
         {% empty %}
-        <tr><td colspan="6">Không có dữ liệu</td></tr>
+            <tr><td colspan="6" class="empty">Không có thanh toán</td></tr>
         {% endfor %}
+        </tbody>
     </table>
 </div>
 </body>
 </html>
 ```
 
-<img width="1103" height="639" alt="image" src="https://github.com/user-attachments/assets/a4ce75af-42a5-4d61-ba82-0bf856110ce0" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/2a090825-837d-48fe-aa21-93e3cd148bb0" />
 
 ## 15. Tạo migration cho các model
 
@@ -866,7 +929,7 @@ Trang chủ sẽ hiển thị:
 - danh sách khách hàng nợ xấu
 - danh sách thanh toán gần nhất
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a51ecd6c-f711-4455-adc0-9f5ec05552f2" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9f8f7759-8538-45c8-a6a6-4db05db66c96" />
 
 ## 20. Kiểm tra dữ liệu bằng phpMyAdmin
 
